@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School-DB</title>
+</head>
+<body>
+    <h1>Heloo!!!</h1>
+
+<div>
+    <label for="Student">Student</label>
+    <input type="radio" id="student" name="stud" value="student"  onclick="updateDropdownlist('student')"></br>
+    
+    <label for="mentor">Mentor</label>
+    <input type="radio" id="mentor" name="stud"onclick="updateDropdownlist('mentor')" value="mentor"></br>
+    <label for="dropDown" id="listDropdown"></label>
+    
+
+<select name="Student" id="dropdown1" >
+</select>
+
+<select name="Mentor" id="dropdown2" >
+</select>
+<button class="add" onclick="getStudents(this.value)">Add</button>
+</div>
+    <script>
+function Add(){
+fetch("http://localhost:5000/listwithmentor")
+.then(res =>
+	res.json())
+    .then(d => {
+	})
+}
+function updateDropdownlist(name){
+
+    if(name=='mentor'){
+        getMentors("dropdown1")
+        getStudents("dropdown2")
+    }else{
+        getStudents("dropdown1")
+        getMentors('dropdown2')
+    }
+}
+function getStudents(id){
+let fetchRes = fetch(
+"http://localhost:5000/student");
+	
+
+fetchRes.then(res =>
+	res.json()).then(d => {
+        // document.getElementById("listDropdown").innerHTML=name+' list'
+		populateStudentsDropdown(d,id)
+	})
+}
+
+    function populateStudentsDropdown(students,id) {
+      const studentSelect = document.getElementById(id);
+      deleteDropdown(studentSelect)
+      students.forEach(student => {
+        const option = document.createElement('option');
+        option.value = student._id;
+        option.textContent = student.name; 
+        studentSelect.appendChild(option);
+      });
+    }
+
+    function deleteDropdown(comboBox) {
+    while (comboBox.options.length > 0) {                
+        comboBox.remove(0);
+    }}        
+
+
+    function getMentors(id){
+let fetchRes = fetch(
+"http://localhost:5000/mentor");
+	
+
+fetchRes.then(res =>
+	res.json()).then(d => {
+        // document.getElementById("listDropdown").innerHTML=name+' list'
+		populateMentorsDropdown(d,id)
+	})
+}
+
+    function populateMentorsDropdown(mentors,id) {
+      const mentorSelect = document.getElementById(id);
+      deleteDropdown(mentorSelect)
+      mentors.forEach(mentor => {
+        const option = document.createElement('option');
+        option.value = mentor._id; // Assuming mentor has an '_id' field
+        option.textContent = mentor.name; // Assuming mentor has a 'name' field
+        mentorSelect.appendChild(option);
+      });
+    }
+        </script>
+</body>
+</html>
+
